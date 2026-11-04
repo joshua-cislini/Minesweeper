@@ -1,0 +1,14 @@
+{
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.formatting": "clangFormat",
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "clangd.arguments": [
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=detailed",
+        "--header-insertion=never",
+        "--query-driver=C:/msys64/ucrt64/bin/*"
+    ],
+    "makefile.makePath": "C:/msys64/ucrt64/bin/mingw32-make.exe",
+    "makefile.configureOnOpen": true
+}
