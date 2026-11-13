@@ -3,8 +3,8 @@
 
 #include <stdbool.h>
 
-#define MAX_LINE 10
-#define MAX_COLUMN 10
+#define MAX_LINE 20
+#define MAX_COLUMN 50
 
 #define CASE_WIDTH 35
 #define CASE_HEIGHT 35
@@ -12,7 +12,15 @@
 #define WINDOW_WIDTH (MAX_COLUMN * CASE_WIDTH)
 #define WINDOW_HEIGHT (MAX_LINE * CASE_HEIGHT)
 
-#define NB_BOMBS 10
+#define TOTAL_CELLS ((MAX_LINE) * (MAX_COLUMN))
+#define RAW_NB_BOMBS (((TOTAL_CELLS) / 10) + ((TOTAL_CELLS) / 65))
+
+#define NB_BOMBS                                                      \
+	((TOTAL_CELLS) <= 1 ? 0                                           \
+	 : (RAW_NB_BOMBS) < 1                                             \
+			 ? 1                                                      \
+			 : ((RAW_NB_BOMBS) >= (TOTAL_CELLS) ? ((TOTAL_CELLS) - 1) \
+												: (RAW_NB_BOMBS)))
 
 #define STATE_IDLE 0
 #define STATE_RUN 1

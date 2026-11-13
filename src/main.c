@@ -43,6 +43,8 @@ int main(int argc, char *argv[]) {
 
 	case_t grid[MAX_LINE][MAX_COLUMN] = {}; // 2D grid initialized to 0 / false
 	int state = STATE_IDLE;					// Current game state
+	Uint32 start_ticks = 0;					// Timestamp when 'S' was pressed
+	int last_sec = -1;						// Last displayed timer in seconds
 
 	SDL_Window *window = nullptr;	  // The window we'll be rendering to
 	SDL_Renderer *renderer = nullptr; // The renderer contained by the window
@@ -87,7 +89,30 @@ int main(int argc, char *argv[]) {
 	// ********** START OF THE GAME LOGIC *********
 	// Waiting a mouse or keyboard event.
 	// Quit application when ESC was pressed or window is closed
-	while((SDL_WaitEvent(&event) >= 0) && (event.type != SDL_QUIT) && !(event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)) {
+	while(true) {
+		int has_event = SDL_WaitEventTimeout(&event, 100);
+
+		// Update timer in window title during active gameplay
+		if(state == STATE_RUN) {
+			int total_sec = (int)((SDL_GetTicks() - start_ticks) / 1000);
+			if(total_sec != last_sec) {
+				last_sec = total_sec;
+				int mins = total_sec / 60;
+				int secs = total_sec % 60;
+				char title[128];
+				(void)snprintf(title, sizeof(title), "%s %s | Time: %02d:%02d", PROJECT_NAME, PROJECT_VERSION, mins, secs);
+				SDL_SetWindowTitle(window, title);
+			}
+		}
+
+		if(has_event == 0) {
+			continue;
+		}
+
+		if(event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)) {
+			break;
+		}
+
 		// Test on mouse event
 		if(event.type == SDL_MOUSEBUTTONDOWN) {
 			int x = 0, y = 0;
@@ -108,10 +133,29 @@ int main(int argc, char *argv[]) {
 						if(grid[line][col].bomb) {
 							showBomb(renderer, textures, grid, col, line);
 							state = STATE_LOST;
+							int total_sec = (int)((SDL_GetTicks() - start_ticks) / 1000);
+							int mins = total_sec / 60;
+							int secs = total_sec % 60;
+							char title[128];
+							(void)snprintf(title, sizeof(title), "%s %s | Game Over (%02d:%02d)", PROJECT_NAME, PROJECT_VERSION, mins, secs);
+							SDL_SetWindowTitle(window, title);
 							printf("GAME OVER!!!\n");
 							printf("Press 's' to restart the game\n");
 						} else {
 							checkCaseAround(renderer, textures, grid, col, line);
+							if(checkWin(grid)) {
+								state = STATE_WIN;
+								int total_sec = (int)((SDL_GetTicks() - start_ticks) / 1000);
+								int mins = total_sec / 60;
+								int secs = total_sec % 60;
+								char title[128];
+								(void)snprintf(title, sizeof(title), "%s %s | WINNER! Time: %02d:%02d", PROJECT_NAME, PROJECT_VERSION, mins, secs);
+								SDL_SetWindowTitle(window, title);
+								printf("Win!!!\n");
+								printf("Time elapsed: %02d:%02d (%d seconds)\n", mins, secs, total_sec);
+								printf("Press 's' to restart the game.\n");
+								winAnimation(renderer, textures, grid);
+							}
 						}
 					}
 				}
@@ -119,6 +163,19 @@ int main(int argc, char *argv[]) {
 				printf(" right click\n");
 				if(state == STATE_RUN && col >= 0 && col < MAX_COLUMN && line >= 0 && line < MAX_LINE) {
 					toggleFlag(renderer, textures, grid, col, line);
+					if(checkWin(grid)) {
+						state = STATE_WIN;
+						int total_sec = (int)((SDL_GetTicks() - start_ticks) / 1000);
+						int mins = total_sec / 60;
+						int secs = total_sec % 60;
+						char title[128];
+						(void)snprintf(title, sizeof(title), "%s %s | WINNER! Time: %02d:%02d", PROJECT_NAME, PROJECT_VERSION, mins, secs);
+						SDL_SetWindowTitle(window, title);
+						printf("Win!!!\n");
+						printf("Time elapsed: %02d:%02d (%d seconds)\n", mins, secs, total_sec);
+						printf("Press 's' to restart the game.\n");
+						winAnimation(renderer, textures, grid);
+					}
 				}
 			} else if(event.button.button == SDL_BUTTON_MIDDLE) {
 				printf(" middle click\n");
@@ -215,6 +272,11 @@ int main(int argc, char *argv[]) {
 						printf("Start\n");
 						creationGrid(renderer, textures, grid);
 						state = STATE_RUN;
+						start_ticks = SDL_GetTicks();
+						last_sec = -1;
+						char title[128];
+						(void)snprintf(title, sizeof(title), "%s %s | Time: 00:00", PROJECT_NAME, PROJECT_VERSION);
+						SDL_SetWindowTitle(window, title);
 					}
 					break;
 				}

@@ -17,6 +17,7 @@ Checks: >
   -cert-err33-c,
   -cert-err33-cpp,
   -misc-include-cleaner,
+  -misc-no-recursion,
   -bugprone-random-generator-seed,
   -cert-msc32-c,
   -cert-msc32-cpp,

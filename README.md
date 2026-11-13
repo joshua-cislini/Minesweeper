@@ -29,17 +29,44 @@ The objective of this project is to build a complete graphical Minesweeper game 
 - **TP01 - Step 2**: Unified texture array, 2D grid matrix, mouse grid coordinate mapping, and basic grid rendering.
 - **TP01 - Step 3**: Modularized architecture (`definition.h`, `demineur.h`, `demineur.c`), game state machine (`STATE_IDLE`, `STATE_RUN`, `STATE_LOST`, `STATE_WIN`), grid initialization with `creationGrid()`, and bomb click handling with `showBomb()`.
 - **TP01 - Step 4**: Upgraded `checkCaseAround()` with full 8-neighbor adjacency checking and grid boundary validation (*effets de bords*), displaying neighbor mine counts `1` to `8` or `empty.bmp`.
-- **TP01 - Step 5 (Current Status)**:
-  - Refactored texture indexing using `listoftexture_t` enum (`eEmpty`, `eOne`..`eEight`, `eCase`, `eFlag`, `eBomb`, `eRedbomb`, `eNberOfTexture`).
-  - Redefined grid with structured cells (`case_t grid[MAX_LINE][MAX_COLUMN]`) tracking `bomb`, `open`, and `flag` states.
-  - Implemented right-click flag toggling via `toggleFlag()` to mark/unmark suspect tiles with `flag.bmp` and `case.bmp`.
-  - Added click guard preventing flagged or already-opened cells from being detonated or uncovered.
-- **Next Steps**: Cascade / flood-fill expansion for empty regions and automatic victory detection (`checkWin`).
+- **TP01 - Step 5**: Refactored texture indexing (`listoftexture_t`), structured cell board (`case_t`), and right-click flag toggling (`toggleFlag`).
+- **TP01 - Step 6 (Current Status)**:
+  - Recursive cascade opening (flood-fill expansion) in `checkCaseAround()` when uncovering cells with zero adjacent mines.
+  - Automatic victory detection with `checkWin()`, supporting both win conditions: opening all non-bomb tiles or correctly marking all bombs with flags.
+  - Celebratory victory sequence (`winAnimation()`): guarantees all remaining bombs are flagged, sweeps a golden celebratory wave across the board, pulses all flags with an emerald shimmer, and renders the final victory board cleanly.
+  - Live game timer tracking elapsed seconds since pressing `S`, updating dynamically in the window title and reporting the final completion time upon victory.
+  - State machine transition to `STATE_WIN` displaying victory console message and allowing game restart via `S`.
 
 ---
 
-## Implemented Features (TP01 - Steps 1 to 5)
+## Implemented Features (TP01 - Steps 1 to 6)
 
+- **Victory Celebration & Visual Feedback (`winAnimation`)**:
+  - Automatically ensures all 10 mines display their flags upon winning (even when won via tile clearing).
+  - Sweeps a diagonal golden celebratory ripple across the board using hardware-accelerated translucent blend primitives.
+  - Flashes an emerald green victory pulse on all flagged mines before settling into the clean final board state.
+- **Elapsed Game Timer**:
+  - Automatically records the timestamp whenever `S` starts or resets a game.
+  - Dynamically updates the window title in real-time during `STATE_RUN` (`Minesweeper 0.1.0 | Time: mm:ss`).
+  - Displays the total elapsed time in the title and console upon victory:
+    ```text
+    Win!!!
+    Time elapsed: 00:42 (42 seconds)
+    Press 's' to restart the game.
+    ```
+- **Automatic Victory Detection (`checkWin`)**:
+  - Automatically evaluates game board state after every left-click or flag toggle.
+  - Supports both victory paths:
+    - **Tile Clearance**: All 90 safe non-bomb tiles are successfully opened.
+    - **Bomb Flagging**: All 10 mines are accurately flagged with no erroneous flags placed.
+  - Transitions to `STATE_WIN` and prints:
+    ```text
+    Win!!!
+    Press 's' to restart the game.
+    ```
+- **Recursive Cascade / Flood Fill Expansion**:
+  - Implemented in `checkCaseAround()`: when a safe tile with 0 neighboring mines is opened, it recursively discovers and reveals all adjacent unopened, unflagged neighbors.
+  - Bounded recursion terminates naturally at numbered border tiles (1 to 8) and grid limits without cycle risks.
 - **Flag Marking & Toggle (`toggleFlag`)**:
   - Right-click toggles a flag marker on covered tiles.
   - Prevents opening (`checkCaseAround` / `showBomb`) on any cell marked with a flag.
