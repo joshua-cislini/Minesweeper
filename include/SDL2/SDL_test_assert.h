@@ -11,11 +11,11 @@
   freely, subject to the following restrictions:
 
   1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
+	 claim that you wrote the original software. If you use this software
+	 in a product, an acknowledgment in the product documentation would be
+	 appreciated but is not required.
   2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
+	 misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
 
@@ -45,12 +45,12 @@ extern "C" {
 /**
  * \brief Fails the assert.
  */
-#define ASSERT_FAIL     0
+#define ASSERT_FAIL 0
 
 /**
  * \brief Passes the assert.
  */
-#define ASSERT_PASS     1
+#define ASSERT_PASS 1
 
 /**
  * \brief Assert that logs and break execution flow on failures.
@@ -86,7 +86,6 @@ void SDLTest_ResetAssertSummary(void);
  * \brief Logs summary of all assertions (total, pass, fail) since last reset as INFO or ERROR.
  */
 void SDLTest_LogAssertSummary(void);
-
 
 /**
  * \brief Converts the current assert summary state to a test result.

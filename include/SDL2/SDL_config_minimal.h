@@ -11,11 +11,11 @@
   freely, subject to the following restrictions:
 
   1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
+	 claim that you wrote the original software. If you use this software
+	 in a product, an acknowledgment in the product documentation would be
+	 appreciated but is not required.
   2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
+	 misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
 
@@ -31,8 +31,8 @@
  *  This is the minimal configuration that can be used to build SDL.
  */
 
-#define HAVE_STDARG_H   1
-#define HAVE_STDDEF_H   1
+#define HAVE_STDARG_H 1
+#define HAVE_STDDEF_H 1
 
 #if !defined(HAVE_STDINT_H) && !defined(_STDINT_H_)
 /* Most everything except Visual Studio 2008 and earlier has stdint.h now */
@@ -46,7 +46,7 @@ typedef unsigned __int32 uint32_t;
 typedef signed __int64 int64_t;
 typedef unsigned __int64 uint64_t;
 #ifndef _UINTPTR_T_DEFINED
-#ifdef  _WIN64
+#ifdef _WIN64
 typedef unsigned __int64 uintptr_t;
 #else
 typedef unsigned int uintptr_t;
@@ -63,10 +63,10 @@ typedef unsigned int uintptr_t;
 #endif
 
 /* Enable the dummy audio driver (src/audio/dummy/\*.c) */
-#define SDL_AUDIO_DRIVER_DUMMY  1
+#define SDL_AUDIO_DRIVER_DUMMY 1
 
 /* Enable the stub joystick driver (src/joystick/dummy/\*.c) */
-#define SDL_JOYSTICK_DISABLED   1
+#define SDL_JOYSTICK_DISABLED 1
 
 /* Enable the stub haptic driver (src/haptic/dummy/\*.c) */
 #define SDL_HAPTIC_DISABLED 1
@@ -81,15 +81,15 @@ typedef unsigned int uintptr_t;
 #define SDL_LOADSO_DISABLED 1
 
 /* Enable the stub thread support (src/thread/generic/\*.c) */
-#define SDL_THREADS_DISABLED    1
+#define SDL_THREADS_DISABLED 1
 
 /* Enable the stub timer support (src/timer/dummy/\*.c) */
 #define SDL_TIMERS_DISABLED 1
 
 /* Enable the dummy video driver (src/video/dummy/\*.c) */
-#define SDL_VIDEO_DRIVER_DUMMY  1
+#define SDL_VIDEO_DRIVER_DUMMY 1
 
 /* Enable the dummy filesystem driver (src/filesystem/dummy/\*.c) */
-#define SDL_FILESYSTEM_DUMMY  1
+#define SDL_FILESYSTEM_DUMMY 1
 
 #endif /* SDL_config_minimal_h_ */

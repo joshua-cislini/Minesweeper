@@ -11,11 +11,11 @@
   freely, subject to the following restrictions:
 
   1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
+	 claim that you wrote the original software. If you use this software
+	 in a product, an acknowledgment in the product documentation would be
+	 appreciated but is not required.
   2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
+	 misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
 
@@ -68,7 +68,7 @@ extern DECLSPEC int SDLCALL SDL_SetClipboardText(const char *text);
  * \sa SDL_HasClipboardText
  * \sa SDL_SetClipboardText
  */
-extern DECLSPEC char * SDLCALL SDL_GetClipboardText(void);
+extern DECLSPEC char *SDLCALL SDL_GetClipboardText(void);
 
 /**
  * Query whether the clipboard exists and contains a non-empty text string.
@@ -113,7 +113,7 @@ extern DECLSPEC int SDLCALL SDL_SetPrimarySelectionText(const char *text);
  * \sa SDL_HasPrimarySelectionText
  * \sa SDL_SetPrimarySelectionText
  */
-extern DECLSPEC char * SDLCALL SDL_GetPrimarySelectionText(void);
+extern DECLSPEC char *SDLCALL SDL_GetPrimarySelectionText(void);
 
 /**
  * Query whether the primary selection exists and contains a non-empty text
@@ -128,7 +128,6 @@ extern DECLSPEC char * SDLCALL SDL_GetPrimarySelectionText(void);
  * \sa SDL_SetPrimarySelectionText
  */
 extern DECLSPEC SDL_bool SDLCALL SDL_HasPrimarySelectionText(void);
-
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

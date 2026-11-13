@@ -11,11 +11,11 @@
   freely, subject to the following restrictions:
 
   1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
+	 claim that you wrote the original software. If you use this software
+	 in a product, an acknowledgment in the product documentation would be
+	 appreciated but is not required.
   2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
+	 misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
 
@@ -39,7 +39,7 @@ extern "C" {
 /* Function prototypes */
 
 #define FONT_CHARACTER_SIZE 8
-#define FONT_LINE_HEIGHT    (FONT_CHARACTER_SIZE + 2)
+#define FONT_LINE_HEIGHT (FONT_CHARACTER_SIZE + 2)
 
 /**
  *  \brief Draw a string in the currently set font.
@@ -70,12 +70,11 @@ int SDLTest_DrawString(SDL_Renderer *renderer, int x, int y, const char *s);
 /**
  *  \brief Data used for multi-line text output
  */
-typedef struct SDLTest_TextWindow
-{
-    SDL_Rect rect;
-    int current;
-    int numlines;
-    char **lines;
+typedef struct SDLTest_TextWindow {
+	SDL_Rect rect;
+	int current;
+	int numlines;
+	char **lines;
 } SDLTest_TextWindow;
 
 /**

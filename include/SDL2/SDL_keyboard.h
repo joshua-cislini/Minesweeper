@@ -11,11 +11,11 @@
   freely, subject to the following restrictions:
 
   1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
+	 claim that you wrote the original software. If you use this software
+	 in a product, an acknowledgment in the product documentation would be
+	 appreciated but is not required.
   2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
+	 misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
 
@@ -28,9 +28,9 @@
 #ifndef SDL_keyboard_h_
 #define SDL_keyboard_h_
 
-#include "SDL_stdinc.h"
 #include "SDL_error.h"
 #include "SDL_keycode.h"
+#include "SDL_stdinc.h"
 #include "SDL_video.h"
 
 #include "begin_code.h"
@@ -44,12 +44,11 @@ extern "C" {
  *
  *  \note  If you are looking for translated character input, see the ::SDL_TEXTINPUT event.
  */
-typedef struct SDL_Keysym
-{
-    SDL_Scancode scancode;      /**< SDL physical key code - see ::SDL_Scancode for details */
-    SDL_Keycode sym;            /**< SDL virtual key code - see ::SDL_Keycode for details */
-    Uint16 mod;                 /**< current key modifiers */
-    Uint32 unused;
+typedef struct SDL_Keysym {
+	SDL_Scancode scancode; /**< SDL physical key code - see ::SDL_Scancode for details */
+	SDL_Keycode sym;	   /**< SDL virtual key code - see ::SDL_Keycode for details */
+	Uint16 mod;			   /**< current key modifiers */
+	Uint32 unused;
 } SDL_Keysym;
 
 /* Function prototypes */
@@ -61,7 +60,7 @@ typedef struct SDL_Keysym
  *
  * \since This function is available since SDL 2.0.0.
  */
-extern DECLSPEC SDL_Window * SDLCALL SDL_GetKeyboardFocus(void);
+extern DECLSPEC SDL_Window *SDLCALL SDL_GetKeyboardFocus(void);
 
 /**
  * Get a snapshot of the current state of the keyboard.
@@ -301,7 +300,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_IsTextInputShown(void);
  * Set the rectangle used to type Unicode text inputs. Native input methods
  * will place a window with word suggestions near it, without covering the
  * text being inputted.
- * 
+ *
  * To start text input in a given location, this function is intended to be
  * called before SDL_StartTextInput, although some platforms support moving
  * the rectangle even while text input (and a composition) is active.

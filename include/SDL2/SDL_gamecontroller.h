@@ -11,11 +11,11 @@
   freely, subject to the following restrictions:
 
   1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
+	 claim that you wrote the original software. If you use this software
+	 in a product, an acknowledgment in the product documentation would be
+	 appreciated but is not required.
   2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
+	 misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
 
@@ -28,11 +28,11 @@
 #ifndef SDL_gamecontroller_h_
 #define SDL_gamecontroller_h_
 
-#include "SDL_stdinc.h"
 #include "SDL_error.h"
+#include "SDL_joystick.h"
 #include "SDL_rwops.h"
 #include "SDL_sensor.h"
-#include "SDL_joystick.h"
+#include "SDL_stdinc.h"
 
 #include "begin_code.h"
 /* Set up for C function definitions, even when using C++ */
@@ -58,51 +58,46 @@ extern "C" {
 struct _SDL_GameController;
 typedef struct _SDL_GameController SDL_GameController;
 
-typedef enum
-{
-    SDL_CONTROLLER_TYPE_UNKNOWN = 0,
-    SDL_CONTROLLER_TYPE_XBOX360,
-    SDL_CONTROLLER_TYPE_XBOXONE,
-    SDL_CONTROLLER_TYPE_PS3,
-    SDL_CONTROLLER_TYPE_PS4,
-    SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO,
-    SDL_CONTROLLER_TYPE_VIRTUAL,
-    SDL_CONTROLLER_TYPE_PS5,
-    SDL_CONTROLLER_TYPE_AMAZON_LUNA,
-    SDL_CONTROLLER_TYPE_GOOGLE_STADIA,
-    SDL_CONTROLLER_TYPE_NVIDIA_SHIELD,
-    SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_LEFT,
-    SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_RIGHT,
-    SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_PAIR,
-    SDL_CONTROLLER_TYPE_MAX
+typedef enum {
+	SDL_CONTROLLER_TYPE_UNKNOWN = 0,
+	SDL_CONTROLLER_TYPE_XBOX360,
+	SDL_CONTROLLER_TYPE_XBOXONE,
+	SDL_CONTROLLER_TYPE_PS3,
+	SDL_CONTROLLER_TYPE_PS4,
+	SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO,
+	SDL_CONTROLLER_TYPE_VIRTUAL,
+	SDL_CONTROLLER_TYPE_PS5,
+	SDL_CONTROLLER_TYPE_AMAZON_LUNA,
+	SDL_CONTROLLER_TYPE_GOOGLE_STADIA,
+	SDL_CONTROLLER_TYPE_NVIDIA_SHIELD,
+	SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_LEFT,
+	SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_RIGHT,
+	SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_PAIR,
+	SDL_CONTROLLER_TYPE_MAX
 } SDL_GameControllerType;
 
-typedef enum
-{
-    SDL_CONTROLLER_BINDTYPE_NONE = 0,
-    SDL_CONTROLLER_BINDTYPE_BUTTON,
-    SDL_CONTROLLER_BINDTYPE_AXIS,
-    SDL_CONTROLLER_BINDTYPE_HAT
+typedef enum {
+	SDL_CONTROLLER_BINDTYPE_NONE = 0,
+	SDL_CONTROLLER_BINDTYPE_BUTTON,
+	SDL_CONTROLLER_BINDTYPE_AXIS,
+	SDL_CONTROLLER_BINDTYPE_HAT
 } SDL_GameControllerBindType;
 
 /**
  *  Get the SDL joystick layer binding for this controller button/axis mapping
  */
-typedef struct SDL_GameControllerButtonBind
-{
-    SDL_GameControllerBindType bindType;
-    union
-    {
-        int button;
-        int axis;
-        struct {
-            int hat;
-            int hat_mask;
-        } hat;
-    } value;
+typedef struct SDL_GameControllerButtonBind {
+	SDL_GameControllerBindType bindType;
+	union {
+		int button;
+		int axis;
+		struct {
+			int hat;
+			int hat_mask;
+		} hat;
+	} value;
 
 } SDL_GameControllerButtonBind;
-
 
 /**
  *  To count the number of game controllers in the system for the following:
@@ -163,14 +158,14 @@ typedef struct SDL_GameControllerButtonBind
  * \sa SDL_GameControllerAddMappingsFromFile
  * \sa SDL_GameControllerMappingForGUID
  */
-extern DECLSPEC int SDLCALL SDL_GameControllerAddMappingsFromRW(SDL_RWops * rw, int freerw);
+extern DECLSPEC int SDLCALL SDL_GameControllerAddMappingsFromRW(SDL_RWops *rw, int freerw);
 
 /**
  *  Load a set of mappings from a file, filtered by the current SDL_GetPlatform()
  *
  *  Convenience macro.
  */
-#define SDL_GameControllerAddMappingsFromFile(file)   SDL_GameControllerAddMappingsFromRW(SDL_RWFromFile(file, "rb"), 1)
+#define SDL_GameControllerAddMappingsFromFile(file) SDL_GameControllerAddMappingsFromRW(SDL_RWFromFile(file, "rb"), 1)
 
 /**
  * Add support for controllers that SDL is unaware of or to cause an existing
@@ -199,7 +194,7 @@ extern DECLSPEC int SDLCALL SDL_GameControllerAddMappingsFromRW(SDL_RWops * rw, 
  * \sa SDL_GameControllerMapping
  * \sa SDL_GameControllerMappingForGUID
  */
-extern DECLSPEC int SDLCALL SDL_GameControllerAddMapping(const char* mappingString);
+extern DECLSPEC int SDLCALL SDL_GameControllerAddMapping(const char *mappingString);
 
 /**
  * Get the number of mappings installed.
@@ -218,7 +213,7 @@ extern DECLSPEC int SDLCALL SDL_GameControllerNumMappings(void);
  *
  * \since This function is available since SDL 2.0.6.
  */
-extern DECLSPEC char * SDLCALL SDL_GameControllerMappingForIndex(int mapping_index);
+extern DECLSPEC char *SDLCALL SDL_GameControllerMappingForIndex(int mapping_index);
 
 /**
  * Get the game controller mapping string for a given GUID.
@@ -234,7 +229,7 @@ extern DECLSPEC char * SDLCALL SDL_GameControllerMappingForIndex(int mapping_ind
  * \sa SDL_JoystickGetDeviceGUID
  * \sa SDL_JoystickGetGUID
  */
-extern DECLSPEC char * SDLCALL SDL_GameControllerMappingForGUID(SDL_JoystickGUID guid);
+extern DECLSPEC char *SDLCALL SDL_GameControllerMappingForGUID(SDL_JoystickGUID guid);
 
 /**
  * Get the current mapping of a Game Controller.
@@ -253,7 +248,7 @@ extern DECLSPEC char * SDLCALL SDL_GameControllerMappingForGUID(SDL_JoystickGUID
  * \sa SDL_GameControllerAddMapping
  * \sa SDL_GameControllerMappingForGUID
  */
-extern DECLSPEC char * SDLCALL SDL_GameControllerMapping(SDL_GameController *gamecontroller);
+extern DECLSPEC char *SDLCALL SDL_GameControllerMapping(SDL_GameController *gamecontroller);
 
 /**
  * Check if the given joystick is supported by the game controller interface.
@@ -522,7 +517,7 @@ extern DECLSPEC Uint16 SDLCALL SDL_GameControllerGetFirmwareVersion(SDL_GameCont
  *
  * \since This function is available since SDL 2.0.14.
  */
-extern DECLSPEC const char * SDLCALL SDL_GameControllerGetSerial(SDL_GameController *gamecontroller);
+extern DECLSPEC const char *SDLCALL SDL_GameControllerGetSerial(SDL_GameController *gamecontroller);
 
 /**
  * Get the Steam Input handle of an opened controller, if available.
@@ -536,7 +531,6 @@ extern DECLSPEC const char * SDLCALL SDL_GameControllerGetSerial(SDL_GameControl
  * \since This function is available since SDL 2.30.0.
  */
 extern DECLSPEC Uint64 SDLCALL SDL_GameControllerGetSteamHandle(SDL_GameController *gamecontroller);
-
 
 /**
  * Check if a controller has been opened and is currently connected.
@@ -605,7 +599,6 @@ extern DECLSPEC int SDLCALL SDL_GameControllerEventState(int state);
  */
 extern DECLSPEC void SDLCALL SDL_GameControllerUpdate(void);
 
-
 /**
  *  The list of axes available from a controller
  *
@@ -617,16 +610,15 @@ extern DECLSPEC void SDLCALL SDL_GameControllerUpdate(void);
  *  (fully pressed) when reported by SDL_GameControllerGetAxis(). Note that this is not the
  *  same range that will be reported by the lower-level SDL_GetJoystickAxis().
  */
-typedef enum
-{
-    SDL_CONTROLLER_AXIS_INVALID = -1,
-    SDL_CONTROLLER_AXIS_LEFTX,
-    SDL_CONTROLLER_AXIS_LEFTY,
-    SDL_CONTROLLER_AXIS_RIGHTX,
-    SDL_CONTROLLER_AXIS_RIGHTY,
-    SDL_CONTROLLER_AXIS_TRIGGERLEFT,
-    SDL_CONTROLLER_AXIS_TRIGGERRIGHT,
-    SDL_CONTROLLER_AXIS_MAX
+typedef enum {
+	SDL_CONTROLLER_AXIS_INVALID = -1,
+	SDL_CONTROLLER_AXIS_LEFTX,
+	SDL_CONTROLLER_AXIS_LEFTY,
+	SDL_CONTROLLER_AXIS_RIGHTX,
+	SDL_CONTROLLER_AXIS_RIGHTY,
+	SDL_CONTROLLER_AXIS_TRIGGERLEFT,
+	SDL_CONTROLLER_AXIS_TRIGGERRIGHT,
+	SDL_CONTROLLER_AXIS_MAX
 } SDL_GameControllerAxis;
 
 /**
@@ -665,7 +657,7 @@ extern DECLSPEC SDL_GameControllerAxis SDLCALL SDL_GameControllerGetAxisFromStri
  *
  * \sa SDL_GameControllerGetAxisFromString
  */
-extern DECLSPEC const char* SDLCALL SDL_GameControllerGetStringForAxis(SDL_GameControllerAxis axis);
+extern DECLSPEC const char *SDLCALL SDL_GameControllerGetStringForAxis(SDL_GameControllerAxis axis);
 
 /**
  * Get the SDL joystick layer binding for a controller axis mapping.
@@ -682,7 +674,7 @@ extern DECLSPEC const char* SDLCALL SDL_GameControllerGetStringForAxis(SDL_GameC
  */
 extern DECLSPEC SDL_GameControllerButtonBind SDLCALL
 SDL_GameControllerGetBindForAxis(SDL_GameController *gamecontroller,
-                                 SDL_GameControllerAxis axis);
+								 SDL_GameControllerAxis axis);
 
 /**
  * Query whether a game controller has a given axis.
@@ -727,31 +719,30 @@ SDL_GameControllerGetAxis(SDL_GameController *gamecontroller, SDL_GameController
 /**
  *  The list of buttons available from a controller
  */
-typedef enum
-{
-    SDL_CONTROLLER_BUTTON_INVALID = -1,
-    SDL_CONTROLLER_BUTTON_A,
-    SDL_CONTROLLER_BUTTON_B,
-    SDL_CONTROLLER_BUTTON_X,
-    SDL_CONTROLLER_BUTTON_Y,
-    SDL_CONTROLLER_BUTTON_BACK,
-    SDL_CONTROLLER_BUTTON_GUIDE,
-    SDL_CONTROLLER_BUTTON_START,
-    SDL_CONTROLLER_BUTTON_LEFTSTICK,
-    SDL_CONTROLLER_BUTTON_RIGHTSTICK,
-    SDL_CONTROLLER_BUTTON_LEFTSHOULDER,
-    SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,
-    SDL_CONTROLLER_BUTTON_DPAD_UP,
-    SDL_CONTROLLER_BUTTON_DPAD_DOWN,
-    SDL_CONTROLLER_BUTTON_DPAD_LEFT,
-    SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
-    SDL_CONTROLLER_BUTTON_MISC1,    /* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
-    SDL_CONTROLLER_BUTTON_PADDLE1,  /* Xbox Elite paddle P1 (upper left, facing the back) */
-    SDL_CONTROLLER_BUTTON_PADDLE2,  /* Xbox Elite paddle P3 (upper right, facing the back) */
-    SDL_CONTROLLER_BUTTON_PADDLE3,  /* Xbox Elite paddle P2 (lower left, facing the back) */
-    SDL_CONTROLLER_BUTTON_PADDLE4,  /* Xbox Elite paddle P4 (lower right, facing the back) */
-    SDL_CONTROLLER_BUTTON_TOUCHPAD, /* PS4/PS5 touchpad button */
-    SDL_CONTROLLER_BUTTON_MAX
+typedef enum {
+	SDL_CONTROLLER_BUTTON_INVALID = -1,
+	SDL_CONTROLLER_BUTTON_A,
+	SDL_CONTROLLER_BUTTON_B,
+	SDL_CONTROLLER_BUTTON_X,
+	SDL_CONTROLLER_BUTTON_Y,
+	SDL_CONTROLLER_BUTTON_BACK,
+	SDL_CONTROLLER_BUTTON_GUIDE,
+	SDL_CONTROLLER_BUTTON_START,
+	SDL_CONTROLLER_BUTTON_LEFTSTICK,
+	SDL_CONTROLLER_BUTTON_RIGHTSTICK,
+	SDL_CONTROLLER_BUTTON_LEFTSHOULDER,
+	SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,
+	SDL_CONTROLLER_BUTTON_DPAD_UP,
+	SDL_CONTROLLER_BUTTON_DPAD_DOWN,
+	SDL_CONTROLLER_BUTTON_DPAD_LEFT,
+	SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
+	SDL_CONTROLLER_BUTTON_MISC1,	/* Xbox Series X share button, PS5 microphone button, Nintendo Switch Pro capture button, Amazon Luna microphone button */
+	SDL_CONTROLLER_BUTTON_PADDLE1,	/* Xbox Elite paddle P1 (upper left, facing the back) */
+	SDL_CONTROLLER_BUTTON_PADDLE2,	/* Xbox Elite paddle P3 (upper right, facing the back) */
+	SDL_CONTROLLER_BUTTON_PADDLE3,	/* Xbox Elite paddle P2 (lower left, facing the back) */
+	SDL_CONTROLLER_BUTTON_PADDLE4,	/* Xbox Elite paddle P4 (lower right, facing the back) */
+	SDL_CONTROLLER_BUTTON_TOUCHPAD, /* PS4/PS5 touchpad button */
+	SDL_CONTROLLER_BUTTON_MAX
 } SDL_GameControllerButton;
 
 /**
@@ -784,7 +775,7 @@ extern DECLSPEC SDL_GameControllerButton SDLCALL SDL_GameControllerGetButtonFrom
  *
  * \sa SDL_GameControllerGetButtonFromString
  */
-extern DECLSPEC const char* SDLCALL SDL_GameControllerGetStringForButton(SDL_GameControllerButton button);
+extern DECLSPEC const char *SDLCALL SDL_GameControllerGetStringForButton(SDL_GameControllerButton button);
 
 /**
  * Get the SDL joystick layer binding for a controller button mapping.
@@ -801,7 +792,7 @@ extern DECLSPEC const char* SDLCALL SDL_GameControllerGetStringForButton(SDL_Gam
  */
 extern DECLSPEC SDL_GameControllerButtonBind SDLCALL
 SDL_GameControllerGetBindForButton(SDL_GameController *gamecontroller,
-                                   SDL_GameControllerButton button);
+								   SDL_GameControllerButton button);
 
 /**
  * Query whether a game controller has a given button.
@@ -816,7 +807,7 @@ SDL_GameControllerGetBindForButton(SDL_GameController *gamecontroller,
  * \since This function is available since SDL 2.0.14.
  */
 extern DECLSPEC SDL_bool SDLCALL SDL_GameControllerHasButton(SDL_GameController *gamecontroller,
-                                                             SDL_GameControllerButton button);
+															 SDL_GameControllerButton button);
 
 /**
  * Get the current state of a button on a game controller.
@@ -831,7 +822,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_GameControllerHasButton(SDL_GameController 
  * \sa SDL_GameControllerGetAxis
  */
 extern DECLSPEC Uint8 SDLCALL SDL_GameControllerGetButton(SDL_GameController *gamecontroller,
-                                                          SDL_GameControllerButton button);
+														  SDL_GameControllerButton button);
 
 /**
  * Get the number of touchpads on a game controller.
@@ -1068,7 +1059,7 @@ extern DECLSPEC void SDLCALL SDL_GameControllerClose(SDL_GameController *gamecon
  *
  * \sa SDL_GameControllerGetAppleSFSymbolsNameForAxis
  */
-extern DECLSPEC const char* SDLCALL SDL_GameControllerGetAppleSFSymbolsNameForButton(SDL_GameController *gamecontroller, SDL_GameControllerButton button);
+extern DECLSPEC const char *SDLCALL SDL_GameControllerGetAppleSFSymbolsNameForButton(SDL_GameController *gamecontroller, SDL_GameControllerButton button);
 
 /**
  * Return the sfSymbolsName for a given axis on a game controller on Apple
@@ -1082,8 +1073,7 @@ extern DECLSPEC const char* SDLCALL SDL_GameControllerGetAppleSFSymbolsNameForBu
  *
  * \sa SDL_GameControllerGetAppleSFSymbolsNameForButton
  */
-extern DECLSPEC const char* SDLCALL SDL_GameControllerGetAppleSFSymbolsNameForAxis(SDL_GameController *gamecontroller, SDL_GameControllerAxis axis);
-
+extern DECLSPEC const char *SDLCALL SDL_GameControllerGetAppleSFSymbolsNameForAxis(SDL_GameController *gamecontroller, SDL_GameControllerAxis axis);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

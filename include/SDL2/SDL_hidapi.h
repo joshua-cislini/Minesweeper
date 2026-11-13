@@ -11,11 +11,11 @@
   freely, subject to the following restrictions:
 
   1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
+	 claim that you wrote the original software. If you use this software
+	 in a product, an acknowledgment in the product documentation would be
+	 appreciated but is not required.
   2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
+	 misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
 
@@ -27,32 +27,32 @@
  *  This is an adaptation of the original HIDAPI interface by Alan Ott,
  *  and includes source code licensed under the following BSD license:
  *
-    Copyright (c) 2010, Alan Ott, Signal 11 Software
-    All rights reserved.
+	Copyright (c) 2010, Alan Ott, Signal 11 Software
+	All rights reserved.
 
-    Redistribution and use in source and binary forms, with or without
-    modification, are permitted provided that the following conditions are met:
+	Redistribution and use in source and binary forms, with or without
+	modification, are permitted provided that the following conditions are met:
 
-    * Redistributions of source code must retain the above copyright notice,
-      this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-    * Neither the name of Signal 11 Software nor the names of its
-      contributors may be used to endorse or promote products derived from
-      this software without specific prior written permission.
+	* Redistributions of source code must retain the above copyright notice,
+	  this list of conditions and the following disclaimer.
+	* Redistributions in binary form must reproduce the above copyright
+	  notice, this list of conditions and the following disclaimer in the
+	  documentation and/or other materials provided with the distribution.
+	* Neither the name of Signal 11 Software nor the names of its
+	  contributors may be used to endorse or promote products derived from
+	  this software without specific prior written permission.
 
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-    POSSIBILITY OF SUCH DAMAGE.
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+	AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+	IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+	ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+	LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+	CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+	SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+	INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+	CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+	ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+	POSSIBILITY OF SUCH DAMAGE.
  *
  * If you would like a version of SDL without this code, you can build SDL
  * with SDL_HIDAPI_DISABLED defined to 1. You might want to do this for example
@@ -80,47 +80,45 @@ typedef struct SDL_hid_device_ SDL_hid_device; /**< opaque hidapi structure */
 /**
  *  \brief  Information about a connected HID device
  */
-typedef struct SDL_hid_device_info
-{
-    /** Platform-specific device path */
-    char *path;
-    /** Device Vendor ID */
-    unsigned short vendor_id;
-    /** Device Product ID */
-    unsigned short product_id;
-    /** Serial Number */
-    wchar_t *serial_number;
-    /** Device Release Number in binary-coded decimal,
-        also known as Device Version Number */
-    unsigned short release_number;
-    /** Manufacturer String */
-    wchar_t *manufacturer_string;
-    /** Product string */
-    wchar_t *product_string;
-    /** Usage Page for this Device/Interface
-        (Windows/Mac only). */
-    unsigned short usage_page;
-    /** Usage for this Device/Interface
-        (Windows/Mac only).*/
-    unsigned short usage;
-    /** The USB interface which this logical device
-        represents.
+typedef struct SDL_hid_device_info {
+	/** Platform-specific device path */
+	char *path;
+	/** Device Vendor ID */
+	unsigned short vendor_id;
+	/** Device Product ID */
+	unsigned short product_id;
+	/** Serial Number */
+	wchar_t *serial_number;
+	/** Device Release Number in binary-coded decimal,
+		also known as Device Version Number */
+	unsigned short release_number;
+	/** Manufacturer String */
+	wchar_t *manufacturer_string;
+	/** Product string */
+	wchar_t *product_string;
+	/** Usage Page for this Device/Interface
+		(Windows/Mac only). */
+	unsigned short usage_page;
+	/** Usage for this Device/Interface
+		(Windows/Mac only).*/
+	unsigned short usage;
+	/** The USB interface which this logical device
+		represents.
 
-        * Valid on both Linux implementations in all cases.
-        * Valid on the Windows implementation only if the device
-          contains more than one interface. */
-    int interface_number;
+		* Valid on both Linux implementations in all cases.
+		* Valid on the Windows implementation only if the device
+		  contains more than one interface. */
+	int interface_number;
 
-    /** Additional information about the USB interface.
-        Valid on libusb and Android implementations. */
-    int interface_class;
-    int interface_subclass;
-    int interface_protocol;
+	/** Additional information about the USB interface.
+		Valid on libusb and Android implementations. */
+	int interface_class;
+	int interface_subclass;
+	int interface_protocol;
 
-    /** Pointer to the next device */
-    struct SDL_hid_device_info *next;
+	/** Pointer to the next device */
+	struct SDL_hid_device_info *next;
 } SDL_hid_device_info;
-
 
 /**
  * Initialize the HIDAPI library.
@@ -196,7 +194,7 @@ extern DECLSPEC Uint32 SDLCALL SDL_hid_device_change_count(void);
  *
  * \sa SDL_hid_device_change_count
  */
-extern DECLSPEC SDL_hid_device_info * SDLCALL SDL_hid_enumerate(unsigned short vendor_id, unsigned short product_id);
+extern DECLSPEC SDL_hid_device_info *SDLCALL SDL_hid_enumerate(unsigned short vendor_id, unsigned short product_id);
 
 /**
  * Free an enumeration Linked List
@@ -226,7 +224,7 @@ extern DECLSPEC void SDLCALL SDL_hid_free_enumeration(SDL_hid_device_info *devs)
  *
  * \since This function is available since SDL 2.0.18.
  */
-extern DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number);
+extern DECLSPEC SDL_hid_device *SDLCALL SDL_hid_open(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number);
 
 /**
  * Open a HID device by its path name.
@@ -240,7 +238,7 @@ extern DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open(unsigned short vendor_id, 
  *
  * \since This function is available since SDL 2.0.18.
  */
-extern DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open_path(const char *path, int bExclusive /* = false */);
+extern DECLSPEC SDL_hid_device *SDLCALL SDL_hid_open_path(const char *path, int bExclusive /* = false */);
 
 /**
  * Write an Output report to a HID device.
