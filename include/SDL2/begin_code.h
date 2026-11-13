@@ -185,7 +185,7 @@
 #define SDL_FALLTHROUGH \
 	do {                \
 	} while(0) /* fallthrough */
-#endif		   /* SDL_HAS_FALLTHROUGH */
+#endif /* SDL_HAS_FALLTHROUGH */
 #undef SDL_HAS_FALLTHROUGH
 #endif /* C++17 or C2x */
 #endif /* SDL_FALLTHROUGH not defined */

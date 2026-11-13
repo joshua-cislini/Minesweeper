@@ -67,7 +67,7 @@ extern void __cdecl __debugbreak(void);
 #include <signal.h>
 #define SDL_TriggerBreakpoint() raise(SIGTRAP)
 #else
-	/* How do we trigger breakpoints on this platform? */
+/* How do we trigger breakpoints on this platform? */
 #define SDL_TriggerBreakpoint()
 #endif
 
