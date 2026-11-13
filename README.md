@@ -2,7 +2,7 @@
 
 An implementation of the classic **Minesweeper** game written in modern **C** (C23) using the **SDL2** library. Developed as part of the **Informatique de base** curriculum (HEIA-FR / HES-SO).
 
-Built on top of a cross-platform C development framework supporting **Windows** (MSYS2 UCRT64 / MinGW-w64), **Linux**, and **macOS** with **GNU Make**, **GCC** / **Clang**, **clangd**, and **VS Code**.
+Built on top of a cross-platform C development framework supporting **Windows** (MSYS2 UCRT64 / MinGW-w64), **Linux**, and **macOS** with **GNU Make**, **GCC** / **Clang**, **clangd**, and **VS Code**. However this particular project is limited to Windows support.
 
 ---
 
@@ -25,52 +25,62 @@ Built on top of a cross-platform C development framework supporting **Windows** 
 
 The objective of this project is to build a complete graphical Minesweeper game using SDL2 in C. Development progresses across several practical lab steps (TPs):
 
-- **TP01 (Current Status)**: Initial window creation, event handling (mouse and keyboard input), random number generation, dynamic BMP texture loading, and tile rendering at position `(0, 0)`.
-- **Next Steps**: Grid generation, 2D array representation, mine placement, flood-fill revelation, victory/defeat logic, and timer/flag counters.
+- **TP01 - Step 1**: Initial window creation, event handling (mouse and keyboard input), random number generation, dynamic BMP texture loading, and tile rendering at position `(0, 0)`.
+- **TP01 - Step 2 (Current Status)**:
+  - Refactored texture storage into a single unified array of texture pointers (`SDL_Texture *textures[NB_TEXTURES]`) loaded in a loop with zero memory leakage.
+  - Added 2D grid matrix (`grid[10][10]`) initialized to zero.
+  - Implemented the `S` key event to start the game: randomly places exactly 10 unique bombs (`1`) in the grid and renders all 100 covered cases (`10x10`) on the screen.
+  - Enhanced mouse event handling: computes and prints mouse pixel coordinates `(x, y)` as well as grid cell indices (`case index of column`, `case index of line` from `0` to `9`).
+- **Next Steps**: Cell revelation upon click, cascade/flood-fill for empty cells, neighbor mine counting, flag placement, and win/loss states.
 
 ---
 
-## Implemented Features (TP01)
+## Implemented Features (TP01 - Steps 1 & 2)
 
 - **Window Management**:
   - SDL2 initialized with accelerated rendering (`SDL_RENDERER_ACCELERATED`).
   - Window dimensions: `350 x 350` pixels (`WINDOW_WIDTH` / `WINDOW_HEIGHT`).
-  - Window title dynamically reflects `PROJECT_NAME` and `PROJECT_VERSION`.
+  - Window title: `"Demineur"`.
 - **Command-line Interface**:
   - Supports `--version` flag to print the current project version.
-- **Mouse Input Handling**:
-  - Captures `SDL_MOUSEBUTTONDOWN` events.
+- **Unified Texture Array**:
+  - `SDL_Texture *textures[NB_TEXTURES]` indexed by `enum TextureIndex`.
+  - Batch-loads all 13 BMP textures from `img/` and immediately frees intermediate `SDL_Surface` structures.
+  - Clean destruction of all textures in a loop on exit.
+- **2D Game Grid & Random Bomb Placement**:
+  - `int grid[GRID_SIZE][GRID_SIZE]` representing the 10x10 game board.
+  - Pressing `S` (`Start`) resets the grid and guarantees exactly 10 unique bombs placed at random non-overlapping coordinates.
+  - Renders all 10x10 covered tiles (`case.bmp`) at `35x35` pixel increments to fill the `350x350` window.
+- **Mouse Input & Grid Mapping**:
+  - Captures `SDL_MOUSEBUTTONDOWN` and retrieves coordinates with `SDL_GetMouseState(&x, &y)`.
+  - Maps pixel coordinates directly to grid indices: `col = x / CASE_WIDTH` and `line = y / CASE_HEIGHT` (0 to 9).
   - Distinguishes between Left Click, Right Click, and Middle Click.
-  - Prints exact cursor coordinates `(x, y)` to standard output.
 - **Keyboard Event Handling**:
   - Captures `SDL_KEYDOWN` events using `SDL_Scancode`.
-  - Supports number keys `1` through `8` (both top row and keypad).
-  - Supports game keys `B`, `C`, `E`, `F`, `N`, and `R`.
-  - Pressing `N` generates and prints a random integer in the range `[1, 10]`.
-  - Pressing `ESC` cleanly quits the application.
-- **Sprite & Texture Management**:
-  - Defined standard tile constants `CASE_WIDTH = 35` and `CASE_HEIGHT = 35`.
-  - Loads 13 distinct BMP textures from the `img/` directory.
-  - Displays the corresponding sprite at position `(0, 0)` upon pressing its associated key.
-  - Full resource deallocation (`SDL_DestroyTexture`, `SDL_DestroyRenderer`, `SDL_DestroyWindow`, `SDL_Quit`) upon exit.
+  - Keys `1` through `8` (top row and keypad): renders the corresponding number tile at `(0, 0)`.
+  - Keys `B`, `C`, `E`, `F`, `R`: renders Bomb, Case, Empty, Flag, and Red Bomb tiles at `(0, 0)`.
+  - Key `N`: generates and prints a random integer in the range `[1, 10]`.
+  - Key `S`: starts/resets the game board.
+  - Key `ESC`: cleanly quits the application.
 
 ---
 
 ## Controls & Key Bindings
 
-| Input | Action / Output | Rendered Tile (at 0,0) |
+| Input | Action / Output | Rendered Tile / Effect |
 |---|---|---|
-| **Left Click** | Console: `Mouse event in (x=<x>, y=<y>), left click` | — |
-| **Right Click** | Console: `Mouse event in (x=<x>, y=<y>), right click` | — |
-| **Middle Click** | Console: `Mouse event in (x=<x>, y=<y>), middle click` | — |
-| **`1` .. `8`** | Console: `<1..8> down event` | Tile `1` .. `8` (`one.bmp` .. `eight.bmp`) |
-| **`B`** | Console: `B down event` | Mine / Bomb (`bomb.bmp`) |
-| **`C`** | Console: `C down event` | Hidden / Covered Case (`case.bmp`) |
-| **`E`** | Console: `E down event` | Empty revealed tile (`empty.bmp`) |
-| **`F`** | Console: `F down event` | Flag (`flag.bmp`) |
+| **`S`** | Console: `Start` | Resets board, places 10 bombs, draws 10x10 grid |
+| **Left Click** | Console: `Mouse event button down`, `x/y`, `col/line`, `left click` | — |
+| **Right Click** | Console: `Mouse event button down`, `x/y`, `col/line`, `right click` | — |
+| **Middle Click** | Console: `Mouse event button down`, `x/y`, `col/line`, `middle click` | — |
+| **`1` .. `8`** | Console: `<1..8> down event` | Tile `1` .. `8` (`one.bmp` .. `eight.bmp`) at `(0, 0)` |
+| **`B`** | Console: `B down event` | Mine / Bomb (`bomb.bmp`) at `(0, 0)` |
+| **`C`** | Console: `C down event` | Hidden / Covered Case (`case.bmp`) at `(0, 0)` |
+| **`E`** | Console: `E down event` | Empty revealed tile (`empty.bmp`) at `(0, 0)` |
+| **`F`** | Console: `F down event` | Flag (`flag.bmp`) at `(0, 0)` |
 | **`N`** | Console: `N down event` + random number `[1, 10]` | — |
-| **`R`** | Console: `R down event` | Exploded / Red Mine (`redbomb.bmp`) |
-| **`Escape`** | Exits the application | — |
+| **`R`** | Console: `R down event` | Exploded / Red Mine (`redbomb.bmp`) at `(0, 0)` |
+| **`Escape`** | Exits the application | Clean resource deallocation |
 
 ---
 
