@@ -26,21 +26,37 @@ Built on top of a cross-platform C development framework supporting **Windows** 
 The objective of this project is to build a complete graphical Minesweeper game using SDL2 in C. Development progresses across several practical lab steps (TPs):
 
 - **TP01 - Step 1**: Initial window creation, event handling (mouse and keyboard input), random number generation, dynamic BMP texture loading, and tile rendering at position `(0, 0)`.
-- **TP01 - Step 2 (Current Status)**:
-  - Refactored texture storage into a single unified array of texture pointers (`SDL_Texture *textures[NB_TEXTURES]`) loaded in a loop with zero memory leakage.
-  - Added 2D grid matrix (`grid[10][10]`) initialized to zero.
-  - Implemented the `S` key event to start the game: randomly places exactly 10 unique bombs (`1`) in the grid and renders all 100 covered cases (`10x10`) on the screen.
-  - Enhanced mouse event handling: computes and prints mouse pixel coordinates `(x, y)` as well as grid cell indices (`case index of column`, `case index of line` from `0` to `9`).
-- **Next Steps**: Cell revelation upon click, cascade/flood-fill for empty cells, neighbor mine counting, flag placement, and win/loss states.
+- **TP01 - Step 2**: Unified texture array, 2D grid matrix, mouse grid coordinate mapping, and basic grid rendering.
+- **TP01 - Step 3 (Current Status)**:
+  - Modularized project architecture: extracted constants and definitions into [definition.h](file:///c:/Users/Joshua/OneDrive/Source/C/Minesweeper/include/definition.h) and core gameplay routines into [demineur.h](file:///c:/Users/Joshua/OneDrive/Source/C/Minesweeper/include/demineur.h) / [demineur.c](file:///c:/Users/Joshua/OneDrive/Source/C/Minesweeper/src/demineur.c).
+  - Introduced game states: `STATE_IDLE`, `STATE_RUN`, `STATE_WIN`, and `STATE_LOST`.
+  - Implemented `creationGrid()`: resets the grid, places 10 random bombs, renders the 10x10 covered board, and transitions to `STATE_RUN`. Can only be triggered from `STATE_IDLE`, `STATE_LOST`, or `STATE_WIN`.
+  - Implemented cell click processing in `STATE_RUN`:
+    - Clicking an empty cell calls `checkCaseAround()` and reveals the empty tile.
+    - Clicking a bomb calls `showBomb()`, displaying a red bomb at the clicked cell and revealing all other bombs on the board.
+    - Transitions to `STATE_LOST` upon hitting a bomb and outputs game over instructions:
+      ```text
+      GAME OVER!!!
+      Press 's' to restart the game
+      ```
+- **Next Steps**: Cascade/flood-fill revelation for empty cells, neighboring mine count tiles (1 to 8), right-click flag placing, and win condition check.
 
 ---
 
-## Implemented Features (TP01 - Steps 1 & 2)
+## Implemented Features (TP01 - Steps 1, 2 & 3)
 
+- **Modular Architecture**:
+  - `include/definition.h`: Central repository for game constants (`MAX_LINE`, `MAX_COLUMN`, `CASE_WIDTH`, `CASE_HEIGHT`, `NB_BOMBS`), state codes, and texture indices.
+  - `include/demineur.h` & `src/demineur.c`: Encapsulated game logic and rendering functions (`creationGrid`, `showBomb`, `checkCaseAround`).
+- **Game State Machine**:
+  - `STATE_IDLE`: Initial state waiting for the player to press `S`.
+  - `STATE_RUN`: Active game state processing grid clicks.
+  - `STATE_LOST`: Game over state after detonating a mine; allows restarting by pressing `S`.
+  - `STATE_WIN`: Victory state (prepared for subsequent steps).
 - **Window Management**:
   - SDL2 initialized with accelerated rendering (`SDL_RENDERER_ACCELERATED`).
   - Window dimensions: `350 x 350` pixels (`WINDOW_WIDTH` / `WINDOW_HEIGHT`).
-  - Window title: `"Demineur"`.
+  - Window title: dynamically injected project name and version.
 - **Command-line Interface**:
   - Supports `--version` flag to print the current project version.
 - **Unified Texture Array**:
@@ -48,19 +64,19 @@ The objective of this project is to build a complete graphical Minesweeper game 
   - Batch-loads all 13 BMP textures from `img/` and immediately frees intermediate `SDL_Surface` structures.
   - Clean destruction of all textures in a loop on exit.
 - **2D Game Grid & Random Bomb Placement**:
-  - `int grid[GRID_SIZE][GRID_SIZE]` representing the 10x10 game board.
+  - `unsigned char grid[MAX_LINE][MAX_COLUMN]` representing the 10x10 board.
   - Pressing `S` (`Start`) resets the grid and guarantees exactly 10 unique bombs placed at random non-overlapping coordinates.
   - Renders all 10x10 covered tiles (`case.bmp`) at `35x35` pixel increments to fill the `350x350` window.
-- **Mouse Input & Grid Mapping**:
+- **Mouse Input & Grid Interaction**:
   - Captures `SDL_MOUSEBUTTONDOWN` and retrieves coordinates with `SDL_GetMouseState(&x, &y)`.
   - Maps pixel coordinates directly to grid indices: `col = x / CASE_WIDTH` and `line = y / CASE_HEIGHT` (0 to 9).
-  - Distinguishes between Left Click, Right Click, and Middle Click.
+  - Handles bomb clicks via `showBomb()` and safe clicks via `checkCaseAround()`.
 - **Keyboard Event Handling**:
   - Captures `SDL_KEYDOWN` events using `SDL_Scancode`.
   - Keys `1` through `8` (top row and keypad): renders the corresponding number tile at `(0, 0)`.
   - Keys `B`, `C`, `E`, `F`, `R`: renders Bomb, Case, Empty, Flag, and Red Bomb tiles at `(0, 0)`.
   - Key `N`: generates and prints a random integer in the range `[1, 10]`.
-  - Key `S`: starts/resets the game board.
+  - Key `S`: starts/resets the game board when not currently in an active run.
   - Key `ESC`: cleanly quits the application.
 
 ---
@@ -97,10 +113,13 @@ The objective of this project is to build a complete graphical Minesweeper game 
 ├── README.md                 # Project documentation
 │
 ├── src/                      # C source files
-│   ├── main.c                # Main game loop, event dispatcher & SDL rendering
+│   ├── main.c                # Main game loop & event dispatcher
+│   ├── demineur.c            # Grid creation, bomb revealing & case handling
 │   └── README.md
 │
 ├── include/                  # Header files
+│   ├── definition.h          # Global constants, dimensions, game states & texture enums
+│   ├── demineur.h            # Core gameplay function declarations
 │   ├── SDL2/                 # SDL2 library headers
 │   └── README.md
 │

@@ -1,5 +1,8 @@
 #define SDL_MAIN_HANDLED
 
+#include "definition.h"
+#include "demineur.h"
+
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,32 +16,6 @@
 #ifndef PROJECT_VERSION
 #define PROJECT_VERSION "0.1.0"
 #endif
-
-#define GRID_SIZE 20
-#define CASE_WIDTH 35
-#define CASE_HEIGHT 35
-
-#define WINDOW_WIDTH (GRID_SIZE * CASE_WIDTH)
-#define WINDOW_HEIGHT (GRID_SIZE * CASE_HEIGHT)
-
-#define NB_BOMBS 10
-
-enum TextureIndex {
-	TEX_CASE = 0,
-	TEX_ONE,
-	TEX_TWO,
-	TEX_THREE,
-	TEX_FOUR,
-	TEX_FIVE,
-	TEX_SIX,
-	TEX_SEVEN,
-	TEX_EIGHT,
-	TEX_BOMB,
-	TEX_EMPTY,
-	TEX_FLAG,
-	TEX_REDBOMB,
-	NB_TEXTURES,
-};
 
 static const char *const texture_files[NB_TEXTURES] = {
 		"img\\case.bmp",
@@ -64,7 +41,8 @@ int main(int argc, char *argv[]) {
 
 	srand((unsigned int)time(nullptr)); // Initialize random number generator
 
-	int grid[GRID_SIZE][GRID_SIZE] = {0}; // 2D grid initialized to 0
+	unsigned char grid[MAX_LINE][MAX_COLUMN] = {0}; // 2D grid initialized to 0
+	int state = STATE_IDLE;							// Current game state
 
 	SDL_Window *window = nullptr;	  // The window we'll be rendering to
 	SDL_Renderer *renderer = nullptr; // The renderer contained by the window
@@ -77,7 +55,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Create window
-	window = SDL_CreateWindow("Demineur", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow(PROJECT_NAME " " PROJECT_VERSION, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if(window == nullptr) {
 		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		SDL_Quit();
@@ -127,6 +105,16 @@ int main(int argc, char *argv[]) {
 
 			if(event.button.button == SDL_BUTTON_LEFT) {
 				printf(" left click\n");
+				if(state == STATE_RUN && col >= 0 && col < MAX_COLUMN && line >= 0 && line < MAX_LINE) {
+					if(grid[line][col] == 1) {
+						showBomb(renderer, textures, grid, col, line);
+						state = STATE_LOST;
+						printf("GAME OVER!!!\n");
+						printf("Press 's' to restart the game\n");
+					} else {
+						checkCaseAround(renderer, textures, grid, col, line);
+					}
+				}
 			} else if(event.button.button == SDL_BUTTON_RIGHT) {
 				printf(" right click\n");
 			} else if(event.button.button == SDL_BUTTON_MIDDLE) {
@@ -220,36 +208,11 @@ int main(int argc, char *argv[]) {
 					break;
 
 				case SDL_SCANCODE_S: {
-					printf("Start\n");
-
-					// Reset 2D grid to 0
-					for(int row = 0; row < GRID_SIZE; row++) {
-						for(int col = 0; col < GRID_SIZE; col++) {
-							grid[row][col] = 0;
-						}
+					if(state == STATE_IDLE || state == STATE_LOST || state == STATE_WIN) {
+						printf("Start\n");
+						creationGrid(renderer, textures, grid);
+						state = STATE_RUN;
 					}
-
-					// Randomly place exactly 10 bombs (value 1)
-					int bombs_placed = 0;
-					while(bombs_placed < NB_BOMBS) {
-						int row = rand() % GRID_SIZE;
-						int col = rand() % GRID_SIZE;
-						if(grid[row][col] == 0) {
-							grid[row][col] = 1;
-							bombs_placed++;
-						}
-					}
-
-					// Draw all 10x10 cases of the Demineur
-					for(int row = 0; row < GRID_SIZE; row++) {
-						for(int col = 0; col < GRID_SIZE; col++) {
-							rectbutton.x = col * CASE_WIDTH;
-							rectbutton.y = row * CASE_HEIGHT;
-							SDL_QueryTexture(textures[TEX_CASE], nullptr, nullptr, &rectbutton.w, &rectbutton.h);
-							SDL_RenderCopy(renderer, textures[TEX_CASE], nullptr, &rectbutton);
-						}
-					}
-					SDL_RenderPresent(renderer);
 					break;
 				}
 

@@ -1,0 +1,37 @@
+#ifndef DEFINITION_H
+#define DEFINITION_H
+
+#define MAX_LINE 10
+#define MAX_COLUMN 10
+
+#define CASE_WIDTH 35
+#define CASE_HEIGHT 35
+
+#define WINDOW_WIDTH (MAX_COLUMN * CASE_WIDTH)
+#define WINDOW_HEIGHT (MAX_LINE * CASE_HEIGHT)
+
+#define NB_BOMBS 10
+
+#define STATE_IDLE 0
+#define STATE_RUN 1
+#define STATE_WIN 2
+#define STATE_LOST 3
+
+enum TextureIndex {
+	TEX_CASE = 0,
+	TEX_ONE,
+	TEX_TWO,
+	TEX_THREE,
+	TEX_FOUR,
+	TEX_FIVE,
+	TEX_SIX,
+	TEX_SEVEN,
+	TEX_EIGHT,
+	TEX_BOMB,
+	TEX_EMPTY,
+	TEX_FLAG,
+	TEX_REDBOMB,
+	NB_TEXTURES,
+};
+
+#endif // DEFINITION_H
