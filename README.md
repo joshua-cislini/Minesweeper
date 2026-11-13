@@ -27,24 +27,20 @@ The objective of this project is to build a complete graphical Minesweeper game 
 
 - **TP01 - Step 1**: Initial window creation, event handling (mouse and keyboard input), random number generation, dynamic BMP texture loading, and tile rendering at position `(0, 0)`.
 - **TP01 - Step 2**: Unified texture array, 2D grid matrix, mouse grid coordinate mapping, and basic grid rendering.
-- **TP01 - Step 3 (Current Status)**:
-  - Modularized project architecture: extracted constants and definitions into [definition.h](file:///c:/Users/Joshua/OneDrive/Source/C/Minesweeper/include/definition.h) and core gameplay routines into [demineur.h](file:///c:/Users/Joshua/OneDrive/Source/C/Minesweeper/include/demineur.h) / [demineur.c](file:///c:/Users/Joshua/OneDrive/Source/C/Minesweeper/src/demineur.c).
-  - Introduced game states: `STATE_IDLE`, `STATE_RUN`, `STATE_WIN`, and `STATE_LOST`.
-  - Implemented `creationGrid()`: resets the grid, places 10 random bombs, renders the 10x10 covered board, and transitions to `STATE_RUN`. Can only be triggered from `STATE_IDLE`, `STATE_LOST`, or `STATE_WIN`.
-  - Implemented cell click processing in `STATE_RUN`:
-    - Clicking an empty cell calls `checkCaseAround()` and reveals the empty tile.
-    - Clicking a bomb calls `showBomb()`, displaying a red bomb at the clicked cell and revealing all other bombs on the board.
-    - Transitions to `STATE_LOST` upon hitting a bomb and outputs game over instructions:
-      ```text
-      GAME OVER!!!
-      Press 's' to restart the game
-      ```
-- **Next Steps**: Cascade/flood-fill revelation for empty cells, neighboring mine count tiles (1 to 8), right-click flag placing, and win condition check.
+- **TP01 - Step 3**: Modularized architecture (`definition.h`, `demineur.h`, `demineur.c`), game state machine (`STATE_IDLE`, `STATE_RUN`, `STATE_LOST`, `STATE_WIN`), grid initialization with `creationGrid()`, and bomb click handling with `showBomb()`.
+- **TP01 - Step 4 (Current Status)**:
+  - Upgraded `checkCaseAround()` with full 8-neighbor adjacency checking and grid boundary validation (*effets de bords*).
+  - Dynamically displays the neighbor mine count (`1` to `8`) using `one.bmp` through `eight.bmp`, or `empty.bmp` when no adjacent mines are present.
+- **Next Steps**: Cascade / flood-fill expansion for empty regions, right-click flag marking, and win detection.
 
 ---
 
-## Implemented Features (TP01 - Steps 1, 2 & 3)
+## Implemented Features (TP01 - Steps 1 to 4)
 
+- **Adjacent Mine Detection (`checkCaseAround`)**:
+  - Checks the 8 surrounding cells for any clicked non-bomb tile.
+  - Implements strict boundary checking (`nl >= 0 && nl < MAX_LINE && nc >= 0 && nc < MAX_COLUMN`) to prevent edge overflow.
+  - Renders the corresponding sprite: blank tile (`empty.bmp`) if 0 bombs, or numerical indicators 1 to 8 (`one.bmp` to `eight.bmp`).
 - **Modular Architecture**:
   - `include/definition.h`: Central repository for game constants (`MAX_LINE`, `MAX_COLUMN`, `CASE_WIDTH`, `CASE_HEIGHT`, `NB_BOMBS`), state codes, and texture indices.
   - `include/demineur.h` & `src/demineur.c`: Encapsulated game logic and rendering functions (`creationGrid`, `showBomb`, `checkCaseAround`).

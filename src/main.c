@@ -84,15 +84,13 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	// ********** START OF THE GAME LOGIC *********
 	// Waiting a mouse or keyboard event.
 	// Quit application when ESC was pressed or window is closed
-	while((SDL_WaitEvent(&event) >= 0) &&
-		  (event.type != SDL_QUIT) &&
-		  !(event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)) {
+	while((SDL_WaitEvent(&event) >= 0) && (event.type != SDL_QUIT) && !(event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)) {
 		// Test on mouse event
 		if(event.type == SDL_MOUSEBUTTONDOWN) {
-			int x = 0;
-			int y = 0;
+			int x = 0, y = 0;
 			SDL_GetMouseState(&x, &y);
 			int col = x / CASE_WIDTH;
 			int line = y / CASE_HEIGHT;
