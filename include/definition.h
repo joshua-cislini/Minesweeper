@@ -1,6 +1,8 @@
 #ifndef DEFINITION_H
 #define DEFINITION_H
 
+#include <stdbool.h>
+
 #define MAX_LINE 10
 #define MAX_COLUMN 10
 
@@ -17,21 +19,31 @@
 #define STATE_WIN 2
 #define STATE_LOST 3
 
-enum TextureIndex {
-	TEX_CASE = 0,
-	TEX_ONE,
-	TEX_TWO,
-	TEX_THREE,
-	TEX_FOUR,
-	TEX_FIVE,
-	TEX_SIX,
-	TEX_SEVEN,
-	TEX_EIGHT,
-	TEX_BOMB,
-	TEX_EMPTY,
-	TEX_FLAG,
-	TEX_REDBOMB,
-	NB_TEXTURES,
-};
+typedef enum {
+	eEmpty,
+	eOne,
+	eTwo,
+	eThree,
+	eFour,
+	eFive,
+	eSix,
+	eSeven,
+	eEight,
+	eCase,
+	eFlag,
+	eBomb,
+	eRedbomb,
+	eNberOfTexture,
+} listoftexture_t;
+
+#define eRedBomb eRedbomb
+#define eCaseButton eCase
+#define NB_TEXTURES eNberOfTexture
+
+typedef struct {
+	bool bomb;
+	bool open;
+	bool flag;
+} case_t;
 
 #endif // DEFINITION_H

@@ -17,20 +17,20 @@
 #define PROJECT_VERSION "0.1.0"
 #endif
 
-static const char *const texture_files[NB_TEXTURES] = {
-		"img\\case.bmp",
-		"img\\one.bmp",
-		"img\\two.bmp",
-		"img\\three.bmp",
-		"img\\four.bmp",
-		"img\\five.bmp",
-		"img\\six.bmp",
-		"img\\seven.bmp",
-		"img\\eight.bmp",
-		"img\\bomb.bmp",
-		"img\\empty.bmp",
-		"img\\flag.bmp",
-		"img\\redbomb.bmp",
+static const char *const texture_files[eNberOfTexture] = {
+		[eEmpty] = "img\\empty.bmp",
+		[eOne] = "img\\one.bmp",
+		[eTwo] = "img\\two.bmp",
+		[eThree] = "img\\three.bmp",
+		[eFour] = "img\\four.bmp",
+		[eFive] = "img\\five.bmp",
+		[eSix] = "img\\six.bmp",
+		[eSeven] = "img\\seven.bmp",
+		[eEight] = "img\\eight.bmp",
+		[eCase] = "img\\case.bmp",
+		[eFlag] = "img\\flag.bmp",
+		[eBomb] = "img\\bomb.bmp",
+		[eRedbomb] = "img\\redbomb.bmp",
 };
 
 int main(int argc, char *argv[]) {
@@ -41,8 +41,8 @@ int main(int argc, char *argv[]) {
 
 	srand((unsigned int)time(nullptr)); // Initialize random number generator
 
-	unsigned char grid[MAX_LINE][MAX_COLUMN] = {0}; // 2D grid initialized to 0
-	int state = STATE_IDLE;							// Current game state
+	case_t grid[MAX_LINE][MAX_COLUMN] = {}; // 2D grid initialized to 0 / false
+	int state = STATE_IDLE;					// Current game state
 
 	SDL_Window *window = nullptr;	  // The window we'll be rendering to
 	SDL_Renderer *renderer = nullptr; // The renderer contained by the window
@@ -72,9 +72,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	SDL_Rect rectbutton = {0, 0, CASE_WIDTH, CASE_HEIGHT}; // Create rectangle to manage images
-	SDL_Texture *textures[NB_TEXTURES] = {nullptr};		   // Unique array of texture pointers
+	SDL_Texture *textures[eNberOfTexture] = {nullptr};	   // Unique array of texture pointers
 
-	for(int i = 0; i < NB_TEXTURES; i++) {
+	for(int i = 0; i < eNberOfTexture; i++) {
 		SDL_Surface *surface = SDL_LoadBMP(texture_files[i]);
 		if(surface == nullptr) {
 			printf("Unable to load image %s! SDL_Error: %s\n", texture_files[i], SDL_GetError());
@@ -104,17 +104,22 @@ int main(int argc, char *argv[]) {
 			if(event.button.button == SDL_BUTTON_LEFT) {
 				printf(" left click\n");
 				if(state == STATE_RUN && col >= 0 && col < MAX_COLUMN && line >= 0 && line < MAX_LINE) {
-					if(grid[line][col] == 1) {
-						showBomb(renderer, textures, grid, col, line);
-						state = STATE_LOST;
-						printf("GAME OVER!!!\n");
-						printf("Press 's' to restart the game\n");
-					} else {
-						checkCaseAround(renderer, textures, grid, col, line);
+					if(!grid[line][col].flag && !grid[line][col].open) {
+						if(grid[line][col].bomb) {
+							showBomb(renderer, textures, grid, col, line);
+							state = STATE_LOST;
+							printf("GAME OVER!!!\n");
+							printf("Press 's' to restart the game\n");
+						} else {
+							checkCaseAround(renderer, textures, grid, col, line);
+						}
 					}
 				}
 			} else if(event.button.button == SDL_BUTTON_RIGHT) {
 				printf(" right click\n");
+				if(state == STATE_RUN && col >= 0 && col < MAX_COLUMN && line >= 0 && line < MAX_LINE) {
+					toggleFlag(renderer, textures, grid, col, line);
+				}
 			} else if(event.button.button == SDL_BUTTON_MIDDLE) {
 				printf(" middle click\n");
 			}
@@ -128,69 +133,69 @@ int main(int argc, char *argv[]) {
 				case SDL_SCANCODE_1:
 				case SDL_SCANCODE_KP_1:
 					printf("1 down event\n");
-					selectedTexture = textures[TEX_ONE];
+					selectedTexture = textures[eOne];
 					break;
 
 				case SDL_SCANCODE_2:
 				case SDL_SCANCODE_KP_2:
 					printf("2 down event\n");
-					selectedTexture = textures[TEX_TWO];
+					selectedTexture = textures[eTwo];
 					break;
 
 				case SDL_SCANCODE_3:
 				case SDL_SCANCODE_KP_3:
 					printf("3 down event\n");
-					selectedTexture = textures[TEX_THREE];
+					selectedTexture = textures[eThree];
 					break;
 
 				case SDL_SCANCODE_4:
 				case SDL_SCANCODE_KP_4:
 					printf("4 down event\n");
-					selectedTexture = textures[TEX_FOUR];
+					selectedTexture = textures[eFour];
 					break;
 
 				case SDL_SCANCODE_5:
 				case SDL_SCANCODE_KP_5:
 					printf("5 down event\n");
-					selectedTexture = textures[TEX_FIVE];
+					selectedTexture = textures[eFive];
 					break;
 
 				case SDL_SCANCODE_6:
 				case SDL_SCANCODE_KP_6:
 					printf("6 down event\n");
-					selectedTexture = textures[TEX_SIX];
+					selectedTexture = textures[eSix];
 					break;
 
 				case SDL_SCANCODE_7:
 				case SDL_SCANCODE_KP_7:
 					printf("7 down event\n");
-					selectedTexture = textures[TEX_SEVEN];
+					selectedTexture = textures[eSeven];
 					break;
 
 				case SDL_SCANCODE_8:
 				case SDL_SCANCODE_KP_8:
 					printf("8 down event\n");
-					selectedTexture = textures[TEX_EIGHT];
+					selectedTexture = textures[eEight];
 					break;
 
 				case SDL_SCANCODE_B:
 					printf("B down event\n");
-					selectedTexture = textures[TEX_BOMB];
+					selectedTexture = textures[eBomb];
 					break;
 
 				case SDL_SCANCODE_C:
 					printf("C down event\n");
-					selectedTexture = textures[TEX_CASE];
+					selectedTexture = textures[eCase];
 					break;
 
 				case SDL_SCANCODE_E:
 					printf("E down event\n");
-					selectedTexture = textures[TEX_EMPTY];
+					selectedTexture = textures[eEmpty];
 					break;
 
 				case SDL_SCANCODE_F:
 					printf("F down event\n");
-					selectedTexture = textures[TEX_FLAG];
+					selectedTexture = textures[eFlag];
 					break;
 
 				case SDL_SCANCODE_N: {
@@ -202,7 +207,7 @@ int main(int argc, char *argv[]) {
 
 				case SDL_SCANCODE_R:
 					printf("R down event\n");
-					selectedTexture = textures[TEX_REDBOMB];
+					selectedTexture = textures[eRedbomb];
 					break;
 
 				case SDL_SCANCODE_S: {
@@ -230,7 +235,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Destroy textures
-	for(int i = 0; i < NB_TEXTURES; i++) {
+	for(int i = 0; i < eNberOfTexture; i++) {
 		if(textures[i] != nullptr) {
 			SDL_DestroyTexture(textures[i]);
 		}

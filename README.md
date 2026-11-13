@@ -28,15 +28,28 @@ The objective of this project is to build a complete graphical Minesweeper game 
 - **TP01 - Step 1**: Initial window creation, event handling (mouse and keyboard input), random number generation, dynamic BMP texture loading, and tile rendering at position `(0, 0)`.
 - **TP01 - Step 2**: Unified texture array, 2D grid matrix, mouse grid coordinate mapping, and basic grid rendering.
 - **TP01 - Step 3**: Modularized architecture (`definition.h`, `demineur.h`, `demineur.c`), game state machine (`STATE_IDLE`, `STATE_RUN`, `STATE_LOST`, `STATE_WIN`), grid initialization with `creationGrid()`, and bomb click handling with `showBomb()`.
-- **TP01 - Step 4 (Current Status)**:
-  - Upgraded `checkCaseAround()` with full 8-neighbor adjacency checking and grid boundary validation (*effets de bords*).
-  - Dynamically displays the neighbor mine count (`1` to `8`) using `one.bmp` through `eight.bmp`, or `empty.bmp` when no adjacent mines are present.
-- **Next Steps**: Cascade / flood-fill expansion for empty regions, right-click flag marking, and win detection.
+- **TP01 - Step 4**: Upgraded `checkCaseAround()` with full 8-neighbor adjacency checking and grid boundary validation (*effets de bords*), displaying neighbor mine counts `1` to `8` or `empty.bmp`.
+- **TP01 - Step 5 (Current Status)**:
+  - Refactored texture indexing using `listoftexture_t` enum (`eEmpty`, `eOne`..`eEight`, `eCase`, `eFlag`, `eBomb`, `eRedbomb`, `eNberOfTexture`).
+  - Redefined grid with structured cells (`case_t grid[MAX_LINE][MAX_COLUMN]`) tracking `bomb`, `open`, and `flag` states.
+  - Implemented right-click flag toggling via `toggleFlag()` to mark/unmark suspect tiles with `flag.bmp` and `case.bmp`.
+  - Added click guard preventing flagged or already-opened cells from being detonated or uncovered.
+- **Next Steps**: Cascade / flood-fill expansion for empty regions and automatic victory detection (`checkWin`).
 
 ---
 
-## Implemented Features (TP01 - Steps 1 to 4)
+## Implemented Features (TP01 - Steps 1 to 5)
 
+- **Flag Marking & Toggle (`toggleFlag`)**:
+  - Right-click toggles a flag marker on covered tiles.
+  - Prevents opening (`checkCaseAround` / `showBomb`) on any cell marked with a flag.
+  - Prevents placing flags on already-opened tiles.
+- **Cell Structure (`case_t`)**:
+  - Encapsulates per-tile state (`bomb`, `open`, `flag`).
+  - Replaces raw byte grid with a structured `case_t grid[MAX_LINE][MAX_COLUMN]`.
+- **Texture Enum Refactoring (`listoftexture_t`)**:
+  - Type-safe texture index naming (`eEmpty`, `eOne`..`eEight`, `eCase`, `eFlag`, `eBomb`, `eRedbomb`, `eNberOfTexture`).
+  - Standardized `SDL_QueryTexture` and `SDL_RenderCopy` calls across all rendering routines.
 - **Adjacent Mine Detection (`checkCaseAround`)**:
   - Checks the 8 surrounding cells for any clicked non-bomb tile.
   - Implements strict boundary checking (`nl >= 0 && nl < MAX_LINE && nc >= 0 && nc < MAX_COLUMN`) to prevent edge overflow.
@@ -56,11 +69,11 @@ The objective of this project is to build a complete graphical Minesweeper game 
 - **Command-line Interface**:
   - Supports `--version` flag to print the current project version.
 - **Unified Texture Array**:
-  - `SDL_Texture *textures[NB_TEXTURES]` indexed by `enum TextureIndex`.
+  - `SDL_Texture *textures[eNberOfTexture]` indexed by `listoftexture_t`.
   - Batch-loads all 13 BMP textures from `img/` and immediately frees intermediate `SDL_Surface` structures.
   - Clean destruction of all textures in a loop on exit.
 - **2D Game Grid & Random Bomb Placement**:
-  - `unsigned char grid[MAX_LINE][MAX_COLUMN]` representing the 10x10 board.
+  - `case_t grid[MAX_LINE][MAX_COLUMN]` representing the 10x10 board.
   - Pressing `S` (`Start`) resets the grid and guarantees exactly 10 unique bombs placed at random non-overlapping coordinates.
   - Renders all 10x10 covered tiles (`case.bmp`) at `35x35` pixel increments to fill the `350x350` window.
 - **Mouse Input & Grid Interaction**:
